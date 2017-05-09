@@ -1,0 +1,53 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: critter.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>critter.php</h1>
+
+  <h2>Source of critter.php</h2> 
+    <pre>
+&lt;?php 
+// Critter definition
+
+//define the critter class
+class Critter{
+
+  var $name;
+
+  function __construct($handle = "anonymous"){
+    $this-&gt;setName($handle);
+  } // end constructor
+
+  function setName($newName){
+    $this-&gt;name = $newName;
+  } // end setName
+
+  function getName(){
+    return $this-&gt;name;
+  } // end getName
+
+} // end Critter class
+
+?&gt;
+
+
+
+
+
+
+
+
+
+
+    </pre>
+  </body>
+</html>
+

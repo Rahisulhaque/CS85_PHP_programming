@@ -1,0 +1,50 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: Forms.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>Forms.php</h1>
+
+  <h2>Source of Forms.php</h2> 
+    <pre>
+&lt;?php 
+include "SuperHTMLDef.php";
+$s = new SuperHTML("Working with Forms");
+$s-&gt;buildTop();
+
+$s-&gt;startForm();
+$s-&gt;label("User Name");
+$s-&gt;textbox("userName", "Joe");
+
+$numbers = array(
+  "1"=&gt;"ichii",
+  "2"=&gt;"nii",
+  "3"=&gt;"san",
+  "4"=&gt;"shi"
+);
+
+$s-&gt;label("Favorite number");
+$s-&gt;select("favNumber", $numbers);
+
+$s-&gt;submit();
+$s-&gt;endForm();
+
+print $s-&gt;formResults();
+
+$s-&gt;buildBottom();
+
+print $s-&gt;getPage();
+
+?&gt;
+
+    </pre>
+  </body>
+</html>
+

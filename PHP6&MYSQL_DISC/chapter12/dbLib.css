@@ -1,0 +1,72 @@
+body {
+  background-color: black;
+  color: white;
+  text-align: center;
+}
+
+select {
+  display: block;
+  clear: both;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+button {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+h1, h2 {
+  text-align:center;
+}
+
+fieldset {
+  width: 80%;
+  display: block;
+  text-align: center;
+  margin-top: 1em;
+  margin-bottom: 1em;
+  margin-left: auto;
+  margin-right: auto; 
+}
+
+fieldset.tiny {
+  border: 0px solid black;
+  padding: 0px;
+  margin: 0px;
+}
+
+label{
+  float: left;  
+  clear: left;
+  width: 10em;
+  text-align: right;
+  margin-left: 15%;
+  padding-right: 1em;
+  margin-bottom: 1em;
+}
+
+input {
+  float: left;
+}
+
+table {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1em;
+  margin-bottom: 1em;
+}
+
+dt {
+  float: left;
+  clear: left;
+  width: 8em;
+  text-align: right;
+}
+
+dd {
+  float: left;
+}

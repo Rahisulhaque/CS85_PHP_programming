@@ -1,0 +1,74 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>sample test</title>
+<style type = "text/css">
+ol ol {
+  border-bottom: 1px solid black;
+}
+
+ol ol li {
+  list-style-type: upperAlpha;
+}
+</style>
+</head>
+<body>
+
+<h1>sample test</h1>
+
+<form action = "gradeQuiz.php"
+      method = "post">
+  <fieldset>
+    <label>Name</label>
+    <input type = "text"
+           name = "student" />
+    
+    <ol>
+      <li>
+        q
+        <ol>
+          <li>
+            <input type = "radio"
+                   name = "quest[1]"
+                   value = "A" />
+              a
+          </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "B" />
+          b
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "C" />
+        c
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "D" />
+          d
+      </li>
+
+    </ol>
+    
+  </li>
+</ol>
+
+<input type = "hidden"
+       name = "quizName"
+       value = "sample test" />
+       
+<input type = "submit"
+       value = "submit quiz" />
+</fieldset>       
+</form>
+</body>
+</html>

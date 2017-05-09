@@ -1,0 +1,76 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: pigify.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>pigify.php</h1>
+
+  <h2>Source of pigify.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+       &lt;title&gt;Pig Latin Generator&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Pig Latin Generator&lt;/h1&gt;
+&lt;?php 
+
+if (!filter_has_var(INPUT_POST, "inputString")){
+  print &lt;&lt;&lt;HERE
+  &lt;form action = ""
+	      method = "post"&gt;
+	&lt;fieldset&gt;
+    &lt;textarea name = "inputString"
+              rows = "20"
+              cols = "40"&gt;&lt;/textarea&gt;
+     &lt;input type = "submit"
+            value = "pigify" /&gt;
+   &lt;/fieldset&gt;
+	 &lt;/form&gt;
+   
+HERE;
+} else {
+  //there is a value, so we'll deal with it
+  
+  $inputString = filter_input(INPUT_POST, "inputString");
+  $newPhrase = "";
+  //break phrase into array
+  $words = split(" ", $inputString);
+  foreach ($words as $theWord){
+    $theWord = rtrim($theWord);
+    $firstLetter = substr($theWord, 0, 1);
+    $restOfWord = substr($theWord, 1, strlen($theWord)-1);
+    //print "$firstLetter) $restOfWord &lt;br /&gt; \n";
+    if (strstr("aeiouAEIOU", $firstLetter)){
+      //it's a vowel
+      $newWord = $theWord . "way";
+    } else {
+      //it's a consonant
+      $newWord = $restOfWord . $firstLetter . "ay";
+    } // end if
+    $newPhrase = $newPhrase . $newWord . " ";
+  } // end foreach
+  print "&lt;p&gt;$newPhrase&lt;/p&gt; \n";
+
+} // end if
+  
+?&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

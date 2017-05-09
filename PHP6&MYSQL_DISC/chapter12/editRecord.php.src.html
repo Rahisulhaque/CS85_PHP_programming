@@ -1,0 +1,54 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: editRecord.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>editRecord.php</h1>
+
+  <h2>Source of editRecord.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Edit Record&lt;/title&gt;
+
+&lt;?php include "dbLib.php"; ?&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Edit Record&lt;/h1&gt;
+&lt;?php 
+
+$dbConn = connectToDb();
+
+// expects $tableName, $keyName, $keyVal
+$tableName = filter_input(INPUT_POST, "tableName");
+$keyName = filter_input(INPUT_POST, "keyName");
+$keyVal = filter_input(INPUT_POST, "keyVal");
+
+$tableName = mysql_real_escape_string($tableName);
+$keyName = mysql_real_escape_string($keyName);
+$keyVal = mysql_real_escape_string($keyVal);
+
+$query = "SELECT * FROM $tableName WHERE $keyName = $keyVal";
+
+//print rToEdit($query);
+print smartRToEdit($query);
+print mainButton();
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

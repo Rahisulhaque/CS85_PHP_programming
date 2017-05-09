@@ -1,0 +1,72 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: methods.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>methods.php</h1>
+
+  <h2>Source of methods.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Critter&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;?php 
+// Adding methods
+
+//define the critter class
+class Critter{
+
+  private $name;
+
+  function __construct($handle = "anonymous"){
+    $this-&gt;name = $handle;
+  } // end constructor
+
+  function setName($newName){
+    $this-&gt;name = $newName;
+  } // end setName
+
+  function getName(){
+    return $this-&gt;name;
+  } // end getName
+
+} // end Critter class
+
+//make an instance of the critter
+$theCritter = new Critter();
+
+//print original name
+print "&lt;p&gt;Initial name: " . $theCritter-&gt;getName() . "&lt;/p&gt;\n";
+
+print "&lt;p&gt;Changing name...&lt;/p&gt;\n";
+$theCritter-&gt;setName("Melville");
+print "&lt;p&gt;New name: " . $theCritter-&gt;getName() . "&lt;/p&gt;\n";
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+
+
+
+
+
+
+
+
+    </pre>
+  </body>
+</html>
+

@@ -1,0 +1,550 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: dbLib.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>dbLib.php</h1>
+
+  <h2>Source of dbLib.php</h2> 
+    <pre>
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "dbLib.css" /&gt;
+
+&lt;?php
+//spyLib.php
+//holds utilities for spy database
+
+//variables
+$userName = "user";
+$dbPass = "password";
+$serverName = "localhost";
+$adminPassword = "absolute";
+$dbName = "ph_6";
+$dbConn = "";
+$mainProgram = "spyMaster.php";
+
+function connectToDb(){
+  //connects to the DB
+  global $serverName, $userName, $dbPass, $dbName;
+  $dbConn = mysql_connect($serverName, $userName, $dbPass);
+  if (!$dbConn){
+    print "&lt;h3&gt;problem connecting to database...&lt;/h3&gt;\n";
+    print "&lt;h3&gt;" . mysql_error() . "&lt;/h3&gt; \n";
+  } // end if
+  
+  $select = mysql_select_db("$dbName");
+  if (!$select){
+    print "&lt;h3&gt;problem selecting database...&lt;/h3&gt;\n";
+    print "&lt;h3&gt;" . mysql_error() . "&lt;/h3&gt; \n";
+  } // end if
+  return $dbConn;
+} // end connectToDb
+
+function qToList($query){
+  //given a query, makes a quick list of data
+  global $dbConn;
+  $output = "&lt;p&gt; \n";
+  $result = mysql_query($query, $dbConn);
+
+  while ($row = mysql_fetch_assoc($result)){
+    foreach ($row as $col=&gt;$val){
+      $output .= "$col: $val&lt;br /&gt;\n";
+    } // end foreach
+    $output .= "&lt;/p&gt; \n" ;
+  } // end while
+  return $output;
+} // end qToList
+
+function qToTable($query){
+  //given a query, automatically creates an HTML table output
+  global $dbConn;
+  $output = "";
+  $result = mysql_query($query, $dbConn);
+
+  $output .= "&lt;table border = '1'&gt;\n";
+  //get column headings
+
+  //get field names
+  $output .= "&lt;tr&gt;\n";
+  while ($field = mysql_fetch_field($result)){
+    $output .= "  &lt;th&gt;$field-&gt;name&lt;/th&gt;\n";
+  } // end while
+  $output .= "&lt;/tr&gt;\n\n";
+
+  //get row data as an associative array
+  while ($row = mysql_fetch_assoc($result)){
+    $output .= "&lt;tr&gt;\n";
+    //look at each field
+    foreach ($row as $col=&gt;$val){
+      $output .= "  &lt;td&gt;$val&lt;/td&gt;\n";
+    } // end foreach
+    $output .= "&lt;/tr&gt;\n\n";
+  }// end while
+
+  $output .= "&lt;/table&gt;\n";
+  return $output;
+} // end qToTable
+
+function tToEdit($tableName){
+  //given a table name, generates HTML table including
+  //add, delete and edit buttons
+  
+  $tableName = filter_input(INPUT_POST, "tableName");
+  $tableName = mysql_real_escape_string($tableName);
+  
+  global $dbConn;
+  $output = "";
+  $query = "SELECT * FROM $tableName";
+
+  $result = mysql_query($query, $dbConn);
+
+  $output .= "&lt;table border = '1'&gt;\n";
+  //get column headings
+
+  //get field names
+  $output .= "&lt;tr&gt;\n";
+  while ($field = mysql_fetch_field($result)){
+    $output .= "  &lt;th&gt;$field-&gt;name&lt;/th&gt;\n";
+  } // end while
+
+  //get name of index field (presuming it's first field)
+  $keyField = mysql_fetch_field($result, 0);
+  $keyName = $keyField-&gt;name;
+  
+  //add empty columns for add, edit, and delete
+  $output .= "&lt;th&gt;&lt;/th&gt;&lt;th&gt;&lt;/th&gt;\n";
+  $output .= "&lt;/tr&gt;\n\n";
+
+  //get row data as an associative array
+  while ($row = mysql_fetch_assoc($result)){
+    $output .= "&lt;tr&gt;\n";
+    //look at each field
+    foreach ($row as $col=&gt;$val){
+      $output .= "  &lt;td&gt;$val&lt;/td&gt;\n";
+    } // end foreach
+    //build little forms for add, delete and edit
+
+
+    //delete = DELETE FROM &lt;table&gt; WHERE &lt;key&gt; = &lt;keyval&gt;
+    $keyVal = $row["$keyName"];
+    $output .= &lt;&lt;&lt; HERE
+
+  &lt;td&gt;
+    &lt;form action = "deleteRecord.php"
+          method = "post"&gt;
+    &lt;fieldset class = "tiny"&gt;
+    &lt;input type = "hidden"
+           name = "tableName"
+           value = "$tableName" /&gt;
+    &lt;input type= "hidden"
+           name = "keyName"
+           value = "$keyName" /&gt;
+    &lt;input type = "hidden"
+           name = "keyVal"
+           value = "$keyVal" /&gt;
+    &lt;input type = "submit"
+           value = "delete" /&gt;
+    &lt;/fieldset&gt;
+    &lt;/form&gt;
+  &lt;/td&gt;
+
+HERE;
+    //update: won't update yet, but set up edit form
+    $output .= &lt;&lt;&lt; HERE
+  &lt;td&gt;
+    &lt;form action = "editRecord.php"
+          method = "post"&gt;
+    &lt;fieldset class = "tiny"&gt;
+    &lt;input type = "hidden"
+           name = "tableName"
+           value = "$tableName" /&gt;
+    &lt;input type= "hidden"
+           name = "keyName"
+           value = "$keyName" /&gt;
+    &lt;input type = "hidden"
+           name = "keyVal"
+           value = "$keyVal" /&gt;
+    &lt;input type = "submit"
+           value = "edit" /&gt;
+  &lt;/fieldset&gt;
+  &lt;/form&gt;
+  &lt;/td&gt;
+
+HERE;
+
+    $output .= "&lt;/tr&gt;\n\n";
+    
+  }// end while
+
+    //add = INSERT INTO &lt;table&gt; {values}
+    //set up insert form send table name
+    $keyVal = $row["$keyName"];
+    $output .= &lt;&lt;&lt; HERE
+&lt;tr&gt;
+  &lt;td colspan = "6"&gt;
+    &lt;form action = "addRecord.php"
+          method = "post"&gt;
+    &lt;fieldset class = "tiny"&gt;
+    &lt;input type = "hidden"
+           name = "tableName"
+           value = "$tableName" /&gt;
+    &lt;button type = "submit"&gt;
+       add a record
+    &lt;/button&gt;
+    &lt;/fieldset&gt;
+    &lt;/form&gt;
+  &lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+
+HERE;
+
+
+  return $output;
+} // end tToEdit
+
+function rToEdit ($query){
+  //given a one-record query, creates a form to edit that record
+  //works on any table, but allows direct editing of keys
+  //use smartRToEdit instead if you can
+  
+  global $dbConn;
+  $output = "";
+  $result = mysql_query($query, $dbConn);
+  $row = mysql_fetch_assoc($result);
+
+  //get table name from field object
+  $fieldObj = mysql_fetch_field($result, 0);
+  $tableName = $fieldObj-&gt;table;
+
+  $output .= &lt;&lt;&lt; HERE
+&lt;form action = "updateRecord.php"
+      method = "post"&gt;
+      
+&lt;fieldset&gt;
+      
+  &lt;input type = "hidden"
+         name = "tableName"
+         value = "$tableName" /&gt;
+
+HERE;
+
+  foreach ($row as $col=&gt;$val){
+    $output .= &lt;&lt;&lt;HERE
+  &lt;label&gt;$col&lt;/label&gt;
+  &lt;input type = "text"
+         name = "$col"
+         value = "$val" /&gt;
+
+HERE;
+  } // end foreach
+  $output .= &lt;&lt;&lt; HERE
+  &lt;button type = "submit"&gt;
+    update this record
+  &lt;/button&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+  return $output;
+} // end rToEdit
+
+function smartRToEdit ($query){
+  //given a one-record query, creates a form to edit that record
+  //Doesn't let user edit first (primary key) field
+  //generates dropdown list for foreign keys
+  //MUCH safer than ordinary rToEdit function
+
+  // --restrictions on table design--
+  //foreign keys MUST be named tableID where 'table' is table name
+  //  (because mySQL doesn't recognize foreign key indicators)
+  // I also expect a 'name' field in any table used as a foreign key
+  //   (for same reason)
+  
+  global $dbConn;
+  $output = "";
+  $result = mysql_query($query, $dbConn);
+  $row = mysql_fetch_assoc($result);
+
+  //get table name from field object
+  $fieldObj = mysql_fetch_field($result, 0);
+  $tableName = $fieldObj-&gt;table;
+
+  $output .= &lt;&lt;&lt; HERE
+&lt;form action = "updateRecord.php"
+      method = "post"&gt;
+&lt;fieldset&gt;
+  &lt;input type = "hidden"
+         name = "tableName"
+         value = "$tableName" /&gt;
+&lt;dl&gt;
+HERE;
+  $fieldNum = 0;
+  foreach ($row as $col=&gt;$val){
+    if ($fieldNum == 0){
+      //it's primary key.  don't make textbox,
+      //but store value in hidden field instead
+      //user shouldn't be able to edit primary keys
+      $output .= &lt;&lt;&lt;HERE
+  
+    &lt;dt&gt;$col&lt;/dt&gt;
+    &lt;dd&gt;$val
+    &lt;input type = "hidden"
+           name = "$col"
+             value = "$val" /&gt;&lt;/dd&gt;
+             
+             
+HERE;
+    } else if (preg_match("/(.*)ID$/", $col, $match)) {
+      //it's a foreign key reference
+      // get table name (match[1])
+      //create a listbox based on table name and its name field
+      $valList = fieldToList($match[1],$col, $fieldNum, "name");
+      
+      $output .= &lt;&lt;&lt;HERE
+    &lt;dt&gt;$col&lt;/dt&gt;
+    &lt;dd&gt;$valList&lt;/dd&gt;
+  
+HERE;
+
+    } else {
+      $output .= &lt;&lt;&lt;HERE
+    &lt;dt&gt;$col&lt;/dt&gt;
+    &lt;dd&gt;
+    &lt;input type = "text"
+           name = "$col"
+           value = "$val" /&gt;&lt;/dd&gt;
+
+HERE;
+    } // end if
+    $fieldNum++;
+  } // end foreach
+  $output .= &lt;&lt;&lt; HERE
+  &lt;/dl&gt;
+      &lt;button type = "submit"&gt;
+         update this record
+      &lt;/button&gt;
+&lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+  return $output;
+} // end smartRToEdit
+
+function updateRec($tableName, $fields, $vals){
+  //expects name of a record, fields array values array
+  //updates database with new values
+  
+  global $dbConn;
+  
+  $output = "";
+  $keyName = $fields[0];
+  $keyVal = $vals[0];
+  $query = "";
+  
+  $query .= "UPDATE $tableName SET \n";
+  for ($i = 1; $i &lt; count($fields); $i++){
+    $query .= $fields[$i];
+    $query .= " = '";
+    $query .= $vals[$i];
+    $query .= "',\n";
+  } // end for loop
+
+  //remove last comma from output
+  $query = substr($query, 0, strlen($query) - 2);
+  
+  $query .= "\nWHERE $keyName = '$keyVal'";
+
+  $result = mysql_query($query, $dbConn);
+  if ($result){
+    $query = "SELECT * FROM $tableName WHERE $keyName = '$keyVal'";
+    $output .= "&lt;h1&gt;update successful&lt;/h1&gt;\n";
+    $output .= "&lt;h2&gt;new value of record:&lt;/h2&gt;";
+    $output .= qToTable($query);
+  } else {
+    $output .= "&lt;h3&gt;there was a problem...&lt;/h3&gt;&lt;pre&gt;$query&lt;/pre&gt;\n";
+  } // end if
+  return $output;
+} // end updateRec
+
+function delRec ($table, $keyName, $keyVal){
+  //deletes $keyVal record from $table
+  global $dbConn;
+  $output = "";
+  $query = "DELETE from $table WHERE $keyName = '$keyVal'";
+  //print "query is $query&lt;br&gt;\n";
+  $result = mysql_query($query, $dbConn);
+  if ($result){
+    $output = "&lt;h3&gt;Record sucessfully deleted&lt;/h3&gt;\n";
+  } else {
+    $output = "&lt;h3&gt;Error deleting record&lt;/h3&gt;\n";
+  } //end if
+  return $output;
+} // end delRec
+
+function tToAdd($tableName){
+  //given table name, generates HTML form to add an entry to the
+  //table.  Works like smartRToEdit in recognizing foreign keys
+  
+  global $dbConn;
+  $output = "";
+  
+  //process a query just to get field names
+  $query = "SELECT * FROM $tableName";
+  $result = mysql_query($query, $dbConn) or die(mysql_error());
+
+  $output .= &lt;&lt;&lt;HERE
+  &lt;form action = "processAdd.php"
+        method = "post"&gt;
+    &lt;fieldset&gt;
+    &lt;dl&gt;
+      &lt;dt&gt;Field&lt;/dt&gt;
+      &lt;dd&gt;Value&lt;/dd&gt;
+    
+HERE;
+
+  $fieldNum = 0;
+  while ($theField = mysql_fetch_field($result)){
+    $fieldName = $theField-&gt;name;
+    if ($fieldNum == 0){
+      //it's the primary key field.  It'll be autoNumber
+      $output .= &lt;&lt;&lt;HERE
+ 
+        &lt;dt&gt;$fieldName&lt;/dt&gt;
+        &lt;dd&gt;AUTONUMBER
+          &lt;input type = "hidden"
+                 name = "$fieldName"
+                 value = "null"&gt;
+        &lt;/dd&gt;
+
+HERE;
+    } else if (preg_match("/(.*)ID$/", $fieldName, $match)) {
+      //it's a foreign key reference.  Use fieldToList to get
+      //a select object for this field
+
+      $valList = fieldToList($match[1],$fieldName, 0, "name");
+      $output .= &lt;&lt;&lt;HERE
+        &lt;dt&gt;$fieldName&lt;/dt&gt;
+        &lt;dd&gt;$valList&lt;/dd&gt;
+
+HERE;
+    } else {
+    //it's an ordinary field.  Print a text box
+    $output .= &lt;&lt;&lt;HERE
+        &lt;dt&gt;$fieldName&lt;/dt&gt;
+        &lt;dd&gt;&lt;input type = "text"
+                   name = "$fieldName"
+                   value = ""&gt;
+        &lt;/dd&gt;
+
+HERE;
+    } // end if
+    $fieldNum++;
+  } // end while
+  $output .= &lt;&lt;&lt;HERE
+    &lt;/dl&gt;
+    
+        &lt;input type = "hidden"
+               name = "tableName"
+               value = "$tableName"&gt;
+        &lt;button type = "submit"&gt;
+           add record
+        &lt;/button&gt;
+    &lt;/fieldset&gt;
+  &lt;/form&gt;
+
+HERE;
+
+  return $output;
+      
+} // end tToAdd
+
+function procAdd($tableName, $fields, $vals){
+  //generates INSERT query, applies to database
+  global $dbConn;
+  
+  $output = "";
+  $query = "INSERT into $tableName VALUES (";
+  foreach ($vals as $theValue){
+    $query .= "'$theValue', ";
+  } // end foreach
+
+  //trim off trailing space and comma
+  $query = substr($query, 0, strlen($query) - 2);
+  
+  $query .= ")";
+  $output = "query is $query&lt;br&gt;\n";
+  
+  $result = mysql_query($query, $dbConn);
+  if ($result){
+    $output .= "&lt;h3&gt;Record added&lt;/h3&gt;\n";
+  } else {
+    $output .= "&lt;h3&gt;There was an error&lt;/h3&gt;\n";
+  } // end if
+  return $output;
+} // end procAdd
+
+
+function fieldToList($tableName, $keyName, $keyVal, $fieldName){
+  //given table and field, generates an HTML select structure
+  //named $keyName.  values will be key field of table, but
+  //text will come from the $fieldName value.
+  //keyVal indicates which element is currently selected
+  
+  global $dbConn;
+  $output = "";
+  $query = "SELECT $keyName, $fieldName FROM $tableName";
+  $result = mysql_query($query, $dbConn);
+  $output .= "&lt;select name = \"$keyName\"&gt;\n";
+  $recNum = 1;
+  while ($row = mysql_fetch_assoc($result)){
+    $theIndex = $row["$keyName"];
+    $theValue = $row["$fieldName"];
+    $output .= &lt;&lt;&lt;HERE
+  &lt;option value = "$theIndex"
+HERE;
+
+    //make it currently selected item
+    if ($theIndex == $keyVal){
+      $output .= " selected = \"selected\"";
+    } // end if
+    $output .= "&gt;$theValue&lt;/option&gt;\n";
+    $recNum++;
+  } // end while
+  $output .= "&lt;/select&gt;\n";
+  return $output;
+} // end fieldToList
+
+function mainButton(){
+  // creates a button to return to the main program
+  
+  global $mainProgram;
+  
+  $output = &lt;&lt;&lt; HERE
+&lt;form action = "$mainProgram"
+      method = "get"&gt;
+  &lt;fieldset class = "tiny"&gt;
+    &lt;button type = "submit"&gt;
+       return to main screen
+    &lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+  return $output;
+} // end mainButton
+  
+?&gt;
+
+    </pre>
+  </body>
+</html>
+

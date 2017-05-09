@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: AddingTags.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>AddingTags.php</h1>
+
+  <h2>Source of AddingTags.php</h2> 
+    <pre>
+&lt;?php 
+include "SuperHTMLDef.php";
+$s = new SuperHTML("Adding Text and Tags");
+$s-&gt;buildTop();
+
+$s-&gt;addText("&lt;p&gt;This is ordinary text added to the document&lt;/p&gt;");
+$s-&gt;addText("&lt;div&gt;You can also add HTML code.&lt;/div&gt;");
+
+$s-&gt;h3("Use h1-h6 methods to add headings");
+$s-&gt;addText("&lt;div&gt;");
+$s-&gt;tag("em", "this line is emphasized");
+$s-&gt;addText("&lt;/div&gt;");
+$s-&gt;buildBottom();
+print $s-&gt;getPage();
+?&gt;
+
+
+
+
+
+
+    </pre>
+  </body>
+</html>
+

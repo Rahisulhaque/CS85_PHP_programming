@@ -1,0 +1,183 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: writeQuiz.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>writeQuiz.php</h1>
+
+  <h2>Source of writeQuiz.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Write Quiz&lt;/title&gt;
+
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "quiz.css" /&gt;
+      
+&lt;/head&gt;
+&lt;body&gt;
+&lt;?php
+//given a quiz file from editQuiz,
+//generates a master file and an HTML file for the quiz
+
+//load variables from form
+$quizName = filter_input(INPUT_POST, "quizName");
+$quizEmail = filter_input(INPUT_POST, "quizEmail");
+$quizPwd = filter_input(INPUT_POST, "quizPwd");
+$quizData = filter_input(INPUT_POST, "quizData");
+
+//open the output file
+$fileBase = str_replace(" ", "_", $quizName);
+$htmlFile = $fileBase . ".html";
+$masFile = $fileBase . ".mas";
+
+$htfp = fopen($htmlFile, "w");
+$htData = buildHTML();
+fputs($htfp, $htData);
+fclose($htfp);
+
+$msfp = fopen($masFile, "w");
+$msData = buildMas();
+fputs($msfp, $msData);
+print &lt;&lt;&lt;HERE
+&lt;pre&gt;
+$msData
+&lt;/pre&gt;
+
+HERE;
+
+fclose($msfp);
+
+function buildMas(){
+  //builds the master file
+  global $quizName, $quizEmail, $quizPwd, $quizData;
+  $msData = $quizName . "\n";
+  $msData .= $quizEmail . "\n";
+  $msData .= $quizPwd . "\n";
+  $msData .=  $quizData;
+  return $msData;
+} // end buildMas
+
+function buildHTML(){
+  global $quizName, $quizData;
+  $htData = &lt;&lt;&lt;HERE
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;$quizName&lt;/title&gt;
+&lt;style type = "text/css"&gt;
+ol ol {
+  border-bottom: 1px solid black;
+}
+
+ol ol li {
+  list-style-type: upperAlpha;
+}
+&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+HERE;
+
+  //get the quiz data
+  $problems = split("\n", $quizData);
+  $htData .= &lt;&lt;&lt;HERE
+
+&lt;h1&gt;$quizName&lt;/h1&gt;
+
+&lt;form action = "gradeQuiz.php"
+      method = "post"&gt;
+  &lt;fieldset&gt;
+    &lt;label&gt;Name&lt;/label&gt;
+    &lt;input type = "text"
+           name = "student" /&gt;
+    
+    &lt;ol&gt;
+
+HERE;
+  $questionNumber = 1;
+
+  foreach ($problems as $currentProblem){
+      list($question, $answerA, $answerB, $answerC, $answerD, $correct) =
+      explode (":", $currentProblem);
+      $htData .= &lt;&lt;&lt;HERE
+      &lt;li&gt;
+        $question
+        &lt;ol&gt;
+          &lt;li&gt;
+            &lt;input type = "radio"
+                   name = "quest[$questionNumber]"
+                   value = "A" /&gt;
+              $answerA
+          &lt;/li&gt;
+
+      &lt;li&gt;
+        &lt;input type = "radio"
+               name = "quest[$questionNumber]"
+               value = "B" /&gt;
+          $answerB
+      &lt;/li&gt;
+
+      &lt;li&gt;
+        &lt;input type = "radio"
+               name = "quest[$questionNumber]"
+               value = "C" /&gt;
+        $answerC
+      &lt;/li&gt;
+
+      &lt;li&gt;
+        &lt;input type = "radio"
+               name = "quest[$questionNumber]"
+               value = "D" /&gt;
+          $answerD
+      &lt;/li&gt;
+
+    &lt;/ol&gt;
+    
+  &lt;/li&gt;
+
+HERE;
+    $questionNumber++;
+  
+  } // end foreach
+  $htData .= &lt;&lt;&lt;HERE
+&lt;/ol&gt;
+
+&lt;input type = "hidden"
+       name = "quizName"
+       value = "$quizName" /&gt;
+       
+&lt;input type = "submit"
+       value = "submit quiz" /&gt;
+&lt;/fieldset&gt;       
+&lt;/form&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+HERE;
+
+  //print $htData;
+  return $htData;
+} // end buildHTML
+
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

@@ -1,0 +1,80 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: Oop.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>Oop.php</h1>
+
+  <h2>Source of Oop.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+  &lt;head&gt;
+    &lt;meta http-equiv="content-type" content="text/xml; charset=utf-8" /&gt;
+    &lt;title&gt;OOP Demo&lt;/title&gt;
+  &lt;/head&gt;
+&lt;body&gt;
+&lt;?php
+// OOP DEMO
+
+class Critter{
+  var $name;
+  
+  function __construct($handle = "Anonymous"){
+  	//constructor
+  	$this-&gt;name = $handle;
+  } // end constructor
+  
+  function sayName(){
+	  return("&lt;p&gt;My name is $this-&gt;name&lt;/p&gt; \n");
+  } // end sayName
+} // end Critter class
+
+class GlitterCritter extends Critter {
+
+  // note there is no constructor and no name property
+  // yet they are available
+  function glow(){
+    print("&lt;p&gt;$this-&gt;name gently shimmers...&lt;/p&gt;\n");
+  } // end glow
+
+} // end GC class def
+
+class BitterCritter extends Critter {
+  function __construct(){
+    $this-&gt;name = "none of your business";
+  } // end BC constructor
+
+  function glower(){
+    return "&lt;p&gt;Grrrrr...&lt;/p&gt;\n";
+  } // end glower
+} // end BitterCritter class def
+
+$first = new Critter("Orville");
+$second = new Critter();
+$third = new BitterCritter("George");
+$fourth = new GlitterCritter("Gloria");
+print "&lt;div&gt; \n";
+print($first-&gt;sayName());
+print($second-&gt;sayName());
+print($third-&gt;sayName());
+print($third-&gt;glower());
+print($fourth-&gt;glow());
+
+print "&lt;/div&gt; \n";
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

@@ -1,0 +1,41 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: foreach.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>foreach.php</h1>
+
+  <h2>Source of foreach.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;For Each&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Foreach Loop Demo&lt;/h1&gt;
+&lt;?php
+
+$list = array("alpha", "beta", "gamma", "delta", "epsilon");
+
+print "&lt;ul&gt;\n";
+foreach ($list as $value){
+    print "  &lt;li&gt;$value&lt;/li&gt;\n";
+} // end foreach 
+print "&lt;/ul&gt;\n"; 
+?&gt; 
+&lt;/body&gt; 
+&lt;/html&gt; 
+
+    </pre>
+  </body>
+</html>
+

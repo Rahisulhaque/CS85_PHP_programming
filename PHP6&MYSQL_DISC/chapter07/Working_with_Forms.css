@@ -1,0 +1,28 @@
+label {
+  float: left;
+  width: 10em;
+  text-align: right;
+  clear: left;
+  margin-right: .5em;
+  margin-bottom: .5em;
+}
+
+input, select {
+  float: left;
+  width: 10em;
+}
+
+button {
+  display: block;
+  clear: both;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: .5em;
+}
+
+dt {
+  font-weight: bold;
+  float: left;
+  clear: left;
+  width: 7em;
+}

@@ -1,0 +1,94 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: SuperHTMLDemo.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>SuperHTMLDemo.php</h1>
+
+  <h2>Source of SuperHTMLDemo.php</h2> 
+    <pre>
+&lt;?php 
+//import the definition of SuperHTML
+include "SuperHTMLDef.php";
+
+//instantiate and use a superHTML page
+
+$s = new SuperHTML("My Super Duper Page!");
+$s-&gt;setTitle("SuperHTML Demo");
+$s-&gt;buildTop();
+
+$s-&gt;h3("Using the tag method");
+$s-&gt;tag("i", "This line should be italicized");
+
+$s-&gt;h3("adding arbitrary text");
+$s-&gt;addText("I used the addText method here");
+
+$s-&gt;h3("build table from 2d array");
+$myArray = array(
+  array("English", "Spanish", "Japanese"),
+  array("One", "Uno", "Ichi"),
+  array("Two", "Dos", "Nii"),
+  array("Three", "Tres", "San")
+);
+$s-&gt;buildTable($myArray);
+
+$s-&gt;h3("build table row-by-row");
+$s-&gt;startTable(3);
+$s-&gt;tRow(array("English", "Greek"), "th");
+$s-&gt;tRow(array("a", "alpha"));
+$s-&gt;tRow(array("b", "beta"));
+$s-&gt;endTable();
+
+$s-&gt;h3("build an unordered list");
+$s-&gt;buildList(array("alpha", "beta", "gamma", "delta"));
+
+$s-&gt;h3("build an ordered list");
+$s-&gt;buildList(array("alpha", "beta", "gamma", "delta"), "ol type = 'a'");
+
+$s-&gt;h3("form elements");
+
+$s-&gt;addText("&lt;form&gt; \n");
+$s-&gt;textbox("user name", "Joe");
+
+
+$s-&gt;h3("create select object from associative array");
+
+$numArray = array(
+  "1"=&gt;"ichii",
+  "2"=&gt;"nii",
+  "3"=&gt;"san",
+  "4"=&gt;"shi"
+);
+
+$s-&gt;buildSelect("options", $numArray);
+
+$s-&gt;h3("make form elements inside a table!");
+
+$myArray = array(
+  array($s-&gt;gTag("b","name"), $s-&gt;gTextbox("name")),
+  array($s-&gt;gAddText("address"), $s-&gt;gTextbox("address")),
+  array($s-&gt;gAddText("phone"), $s-&gt;gTextbox("phone")),
+  array($s-&gt;gAddText("favorite number"), $s-&gt;gSelect("numbers", $numArray))
+);
+
+$s-&gt;buildTable($myArray);
+$s-&gt;submit();
+
+$s-&gt;addText("&lt;/form&gt; \n");
+
+print $s-&gt;getPage();
+
+?&gt;
+
+
+    </pre>
+  </body>
+</html>
+

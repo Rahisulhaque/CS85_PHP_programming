@@ -1,0 +1,325 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: wordFind.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>wordFind.php</h1>
+
+  <h2>Source of wordFind.php</h2> 
+    <pre>
+&lt;?php session_start() ?&gt;
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Word Find Puzzle&lt;/title&gt;
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "wordFind.css" /&gt;
+      
+&lt;/head&gt;
+
+&lt;body&gt;
+
+&lt;?php
+// word Find
+// by Andy Harris, 2003
+// for PHP/MySQL programming for the Absolute Beginner
+// Generates a word search puzzle based on a word list
+// entered by user.  User can also specify the size of
+// the puzzle and print out an answer key if desired
+
+//check for a word list
+if (!filter_has_var(INPUT_POST, "wordList")){
+  print &lt;&lt;&lt; HERE
+    &lt;p&gt;
+      This program is meant to be run from the 
+      &lt;a href = "wordFind.html"&gt;wordFind&lt;/a&gt;
+      page.
+    &lt;/p&gt;
+HERE;
+} else {
+  //get puzzle data from HTML form
+  $boardData = array(
+    "width" =&gt; filter_input(INPUT_POST, "width"),
+    "height" =&gt; filter_input(INPUT_POST, "height"),
+    "name" =&gt; filter_input(INPUT_POST, "name")
+  );
+  
+  //try to get a word list from user input
+  if (parseList() == TRUE){
+    $legalBoard = FALSE;
+
+    //keep trying to build a board until you get a legal result
+    while ($legalBoard == FALSE){
+      clearBoard();
+      $legalBoard = fillBoard();
+    } // end while
+
+    //make the answer key
+    $key = $board;
+    $keyPuzzle = makeBoard($key);
+
+    //make the final puzzle
+    addFoils();
+    $puzzle = makeBoard($board);
+
+    //print out the result page
+    printPuzzle();
+    
+  } // end parsed list if
+} // end word list exists if
+
+function parseList(){
+  //gets word list, creates array of words from it
+  //or return false if impossible
+  
+  global $word, $wordList, $boardData;
+  
+  $wordList = filter_input(INPUT_POST, "wordList");
+  $itWorked = TRUE;
+  
+  //convert word list entirely to upper case
+  $wordList = strtoupper($wordList);
+
+  //split word list into array
+  $word = split("\n", $wordList);
+
+  foreach ($word as $currentWord){
+    //take out trailing newline characters
+    $currentWord = rtrim($currentWord);
+
+    //stop if any words are too long to fit in puzzle
+    if ((strLen($currentWord) &gt; $boardData["width"]) &amp;&amp;
+        (strLen($currentWord) &gt; $boardData["height"])){
+      print "$currentWord is too long for puzzle";
+      $itWorked = FALSE;
+    } // end if
+
+  } // end foreach
+  return $itWorked;
+} // end parseList
+
+function clearBoard(){
+  //initialize board with a . in each cell
+  global $board, $boardData;
+
+  for ($row = 0; $row &lt; $boardData["height"]; $row++){
+    for ($col = 0; $col &lt; $boardData["width"]; $col++){
+      $board[$row][$col] = ".";
+    } // end col for loop
+  } // end row for loop
+} // end clearBoard
+
+function addWord($theWord, $dir){
+  //attempt to add a word to the board or return false if failed
+  global $board, $boardData;
+  
+  //remove trailing characters if necessary
+  $theWord = rtrim($theWord);
+  
+  $itWorked = TRUE;
+  
+  switch ($dir){
+  	case "E":
+  	  //col from 0 to board width - word width
+      //row from 0 to board height
+      $newCol = rand(0, $boardData["width"] - 1 - strlen($theWord)); 
+  	  $newRow = rand(0, $boardData["height"]-1);
+
+      for ($i = 0; $i &lt; strlen($theWord); $i++){
+        //new character same row, initial column + $i
+        $boardLetter = $board[$newRow][$newCol + $i];
+        $wordLetter = substr($theWord, $i, 1);
+        
+        //check for legal values in current space on board
+        if (($boardLetter == $wordLetter) ||
+            ($boardLetter == ".")){
+          $board[$newRow][$newCol + $i] = $wordLetter;
+        } else {
+          $itWorked = FALSE;
+        } // end if
+      } // end for loop
+      break;
+      
+  	case "W":
+  	  //col from word width to board width
+  	  //row from 0 to board height
+      $newCol = rand(strlen($theWord), $boardData["width"] -1); 
+      $newRow = rand(0, $boardData["height"]-1);
+      //print "west:\tRow: $newRow\tCol: $newCol&lt;br&gt;\n";
+  
+      for ($i = 0; $i &lt; strlen($theWord); $i++){
+        //check for a legal move
+        $boardLetter = $board[$newRow][$newCol - $i];
+        $wordLetter = substr($theWord, $i, 1);
+        if (($boardLetter == $wordLetter) ||
+            ($boardLetter == ".")){
+          $board[$newRow][$newCol - $i] = $wordLetter;
+        } else {
+          $itWorked = FALSE;
+        } // end if
+      } // end for loop
+      break;
+      
+    case "S":
+  	  //col from 0 to board width
+  	  //row from 0 to board height - word length
+      $newCol = rand(0, $boardData["width"] -1);
+      $newRow = rand(0, $boardData["height"]-1 - strlen($theWord));
+      //print "south:\tRow: $newRow\tCol: $newCol&lt;br&gt;\n";
+
+      for ($i = 0; $i &lt; strlen($theWord); $i++){
+        //check for a legal move
+        $boardLetter = $board[$newRow + $i][$newCol];
+        $wordLetter = substr($theWord, $i, 1);
+        if (($boardLetter == $wordLetter) ||
+            ($boardLetter == ".")){
+          $board[$newRow + $i][$newCol] = $wordLetter;
+      	} else {
+         $itWorked = FALSE;
+      	} // end if
+      } // end for loop
+      break;
+
+    case "N":
+  	  //col from 0 to board width
+  	  //row from word length to board height
+      $newCol = rand(0, $boardData["width"] -1);
+      $newRow = rand(strlen($theWord), $boardData["height"]-1);
+
+      for ($i = 0; $i &lt; strlen($theWord); $i++){
+        //check for a legal move
+        $boardLetter = $board[$newRow - $i][$newCol];
+        $wordLetter = substr($theWord, $i, 1);
+        if (($boardLetter == $wordLetter) ||
+            ($boardLetter == ".")){
+          $board[$newRow - $i][$newCol] = $wordLetter;
+      	} else {
+         $itWorked = FALSE;
+      	} // end if
+      } // end for loop
+      break;
+
+  } // end switch
+  return $itWorked;
+} // end addWord
+
+function fillBoard(){
+  //fill board with list by calling addWord() for each word
+  //or return false if failed
+  
+  global $word;
+  $direction = array("N", "S", "E", "W");
+  $itWorked = TRUE;
+  $counter = 0;
+  $keepGoing = TRUE;
+  while($keepGoing){
+    $dir = rand(0, 3);
+    $result = addWord($word[$counter], $direction[$dir]);
+    if ($result == FALSE){
+      //print "failed to place $word[$counter]";
+      $keepGoing = FALSE;
+      $itWorked = FALSE;
+    } // end if
+    $counter++;
+    if ($counter &gt;= count($word)){
+      $keepGoing = FALSE;
+    } // end if
+  } // end while
+  return $itWorked;
+  
+} // end fillBoard
+  
+function makeBoard($theBoard){
+  //given a board array, return an HTML table based on the array
+  global $boardData;
+  $puzzle = "";
+  $puzzle .= "&lt;table&gt;\n";
+  //check logic here
+  for ($row = 0; $row &lt; $boardData["height"]; $row++){
+  	$puzzle .= "&lt;tr&gt;\n";
+    for ($col = 0; $col &lt; $boardData["width"]; $col++){
+      $puzzle .= "  &lt;td&gt;{$theBoard[$row][$col]}&lt;/td&gt;\n";
+    } // end col for loop
+    $puzzle .= "&lt;/tr&gt;\n";
+  } // end row for loop
+  $puzzle .= "&lt;/table&gt;\n";
+  return $puzzle;
+} // end printBoard;
+
+function addFoils(){
+  //add random dummy characters to board
+  global $board, $boardData;
+  for ($row = 0; $row &lt; $boardData["height"]; $row++){
+    for ($col = 0; $col &lt; $boardData["width"]; $col++){
+      if ($board[$row][$col] == "."){
+        $newLetter = rand(65, 90);
+        $board[$row][$col] = chr($newLetter);
+      } // end if
+    } // end col for loop
+  } // end row for loop
+} // end addFoils
+
+function printPuzzle(){
+  //print out page to user with puzzle on it
+  
+  global $puzzle, $word, $keyPuzzle, $boardData;
+  //print puzzle itself
+  
+  print &lt;&lt;&lt;HERE
+  &lt;h1&gt;{$boardData["name"]}&lt;/h1&gt;
+  $puzzle
+  &lt;h3&gt;Word List&lt;/h3&gt;
+  &lt;ul&gt;
+
+HERE;
+  //print word list
+  foreach ($word as $theWord){
+    $theWord = rtrim($theWord);
+    print "&lt;li&gt;$theWord&lt;/li&gt;\n";
+  } // end foreach
+  print "&lt;/ul&gt;\n";
+  $puzzleName = $boardData["name"];
+
+  //print form for requesting answer key.
+  //save answer key as session var
+  
+  $_SESSION["key"] = $keyPuzzle;
+  $_SESSION["puzzleName"] = $puzzleName;
+  
+  
+  print &lt;&lt;&lt;HERE
+ 
+  &lt;form action = "wordFindKey.php"
+        method = "post"
+				id = "keyForm"&gt;
+  &lt;div&gt;
+  &lt;input type = "submit"
+         value = "show answer key" /&gt;
+  &lt;/div&gt;
+  &lt;/form&gt;
+
+HERE;
+
+} // end printPuzzle
+
+
+?&gt;
+
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

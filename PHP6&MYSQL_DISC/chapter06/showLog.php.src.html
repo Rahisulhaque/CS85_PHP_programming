@@ -1,0 +1,65 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: showLog.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>showLog.php</h1>
+
+  <h2>Source of showLog.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Quiz Builder&lt;/title&gt;
+
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "quiz.css" /&gt;
+      
+&lt;/head&gt;
+&lt;body&gt;
+&lt;?php 
+//showLog.php
+//shows a log file
+//requires admin password
+
+$password = filter_input(INPUT_POST, "password");
+$logFile = filter_input(INPUT_POST, "logFile");
+
+$logFile .= ".log";
+
+if ($password == "absolute"){
+  $lines = file($logFile);
+  print "&lt;pre&gt;\n";
+  foreach ($lines as $theLine){
+    print $theLine;
+  } // end foreach
+  print "&lt;/pre&gt;\n";
+
+} else {
+  print &lt;&lt;&lt;HERE
+  &lt;p class = "error"&gt;
+Incorrect Password.&lt;br /&gt;
+You must have a password in order to view this log.
+&lt;/p&gt;
+
+HERE;
+} // end if
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

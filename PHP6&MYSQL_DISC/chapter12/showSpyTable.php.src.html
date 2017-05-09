@@ -1,0 +1,60 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: showSpyTable.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>showSpyTable.php</h1>
+
+  <h2>Source of showSpyTable.php</h2> 
+    <pre>
+&lt;!doctype html public "-//W3C//DTD HTML 4.0 //EN"&gt; 
+&lt;html&gt;
+&lt;head&gt;
+&lt;title&gt;Show a spy table&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;?
+
+
+include "spyLib.php";
+
+$dbConn = connectToSpy();
+
+/*$query = "
+select agent.name, operation.name
+FROM agent, operation
+WHERE agent.operationID = operation.operationID";
+*/
+/*$query = "SELECT agent.name AS 'agent',
+          agent.operationID,
+          operation.name AS 'operation'
+from agent, operation WHERE agent.operationID = operation.operationID";
+*/
+
+$query = "SELECT * FROM agent WHERE agentID = 3";
+
+print smartRToEdit($query);
+
+//print qToList($query);
+//print qToTable($query);
+
+//print tToEdit("agents");
+//print "&lt;h1&gt;This is something&lt;/h1&gt;";
+//print fieldToList("operations","operationID","name");
+
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

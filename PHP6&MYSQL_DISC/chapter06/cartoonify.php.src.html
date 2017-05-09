@@ -1,0 +1,49 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: cartoonify.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>cartoonify.php</h1>
+
+  <h2>Source of cartoonify.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Cartoonify&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;
+&lt;?php 
+$fileName = "sonnet76.txt";
+
+$sonnet = file($fileName);
+$output = "";
+
+foreach ($sonnet as $currentLine){
+  $currentLine = str_replace("r", "w", $currentLine);
+  $currentLine = str_replace("l", "w", $currentLine);
+  $output .= rtrim($currentLine) . "&lt;br /&gt;\n";
+} // end foreach
+  $output .= "You wascally wabbit!&lt;br /&gt;\n";
+
+print $output;
+
+?&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

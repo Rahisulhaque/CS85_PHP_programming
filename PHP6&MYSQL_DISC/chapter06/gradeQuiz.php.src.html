@@ -1,0 +1,120 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: gradeQuiz.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>gradeQuiz.php</h1>
+
+  <h2>Source of gradeQuiz.php</h2> 
+    <pre>
+&lt;?php
+
+//retrieve data from form
+$student = filter_input(INPUT_POST, "student");
+$quizName = filter_input(INPUT_POST, "quizName");
+$quest = $_REQUEST["quest"];
+
+print &lt;&lt;&lt;HERE
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Grade for $quizName, $student&lt;/title&gt;
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "quiz.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+&lt;h1&gt;Grade for $quizName, $student&lt;/h1&gt;
+HERE;
+
+
+//open up the correct master file for reading
+$fileBase = str_replace(" ", "_", $quizName);
+$masFile = $fileBase . ".mas";
+$msfp = fopen($masFile, "r");
+
+$logFile = $fileBase . ".log";
+
+//the first three lines are name, instructor's email, and password
+$quizName = fgets($msfp);
+$quizEmail = fgets($msfp);
+$quizPwd = fgets($msfp);
+
+//step through the questions building an answer key
+$numCorrect = 0;
+$questionNumber = 1;
+while (!feof($msfp)){
+  $currentProblem = fgets($msfp);
+  
+  list($question, $answerA, $answerB, $answerC, $answerD, $correct) =
+  split (":", $currentProblem);
+  $key[$questionNumber] = $correct;
+  $questionNumber++;
+} // end while
+fclose($msfp);
+
+//Check each answer from user
+for ($questionNumber = 1; $questionNumber &lt;= count($quest); $questionNumber++){
+  $guess = $quest[$questionNumber];
+  $correct = $key[$questionNumber];
+  $correct = rtrim($correct);
+  //print "$questionNumber, Guess = $guess, Correct = $correct.&lt;br&gt;\n";
+  if ($guess == $correct){
+    //user got it right
+    $numCorrect++;
+    print "&lt;p&gt;problem # $questionNumber was correct&lt;/p&gt; \n";
+  } else {
+    print &lt;&lt;&lt;HERE
+    &lt;p style = "color: red"&gt;
+      problem # $questionNumber was incorrect
+    &lt;/p&gt;
+
+HERE;
+  } // end if
+} // end for
+
+$percentage = ($numCorrect /count($quest)) * 100;
+
+print &lt;&lt;&lt;HERE
+&lt;p&gt;
+  you got $numCorrect right
+  for $percentage percent
+&lt;/p&gt;
+HERE;
+
+date_default_timezone_set("AMERICA/INDIANA/INDIANAPOLIS");
+$today = date("F j, Y, g:i a");
+
+//print "Date: $today&lt;br&gt;\n";
+$location = getenv("REMOTE_ADDR");
+//print "Location: $location&lt;br&gt;\n";
+
+//add results to log file
+$lgfp = fopen($logFile, "a");
+$logLine = $student . "\t";
+$logLine .= $today . "\t";
+$logLine .= $location . "\t";
+$logLine .= $numCorrect . "\t";
+$logLine .= $percentage . "\n";
+
+fputs($lgfp, $logLine);
+fclose($lgfp);
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

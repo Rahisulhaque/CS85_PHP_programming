@@ -1,0 +1,87 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: spyMaster.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>spyMaster.php</h1>
+
+  <h2>Source of spyMaster.php</h2> 
+    <pre>
+
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Spy Master Main Page&lt;/title&gt;
+&lt;?php include "dbLib.php"; ?&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;h1&gt;Spy Master&lt;/h1&gt;
+&lt;form action = "viewQuery.php"
+      method = "post"&gt;
+  &lt;fieldset&gt;
+    &lt;h2&gt;View Data&lt;/h2&gt;
+    &lt;select name = "queryID" size = "10"&gt;
+    &lt;?php
+//get queries from storedQuery table
+
+$dbConn = connectToDb();
+$query = "SELECT * from storedQuery";
+$result = mysql_query($query, $dbConn);
+while($row = mysql_fetch_assoc($result)){
+  $currentQuery = $row['storedQueryID'];
+  $theDescription = $row['description'];
+  print &lt;&lt;&lt;HERE
+      &lt;option value = "$currentQuery"&gt;$theDescription&lt;/option&gt;
+  
+HERE;
+  } // end while
+?&gt;
+    &lt;/select&gt;
+    &lt;button type = "submit"&gt;
+       execute request
+    &lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+
+&lt;form action = "editTable.php"
+      method = "post"&gt;
+  &lt;fieldset&gt;
+    &lt;h2&gt;Edit / Delete table data&lt;/h2&gt;
+    &lt;label&gt;Password&lt;/label&gt;
+    &lt;input type = "password"
+           name = "pwd"
+           value = "absolute" /&gt;
+
+    &lt;select name = "tableName"
+            size = "5"&gt;
+      &lt;option value = "agent"&gt;agents&lt;/option&gt;
+      &lt;option value = "specialty"&gt;specialties&lt;/option&gt;
+      &lt;option value = "operation"&gt;operations&lt;/option&gt;
+      &lt;option value = "agent_specialty"&gt;agent_specialty&lt;/option&gt;
+      &lt;option value = "storedQuery"&gt;storedQuery&lt;/option&gt;
+    &lt;/select&gt;
+    
+    &lt;button type = "submit"&gt;
+      edit table
+    &lt;/button&gt;         
+  &lt;/fieldset&gt;      
+
+&lt;/form&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

@@ -1,0 +1,84 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: assoc.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>assoc.php</h1>
+
+  <h2>Source of assoc.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Associative array demo&lt;/title&gt;
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "assoc.css" /&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Associative Array Demo&lt;/h1&gt;
+&lt;?php 
+
+$stateCap["Alaska"] = "Juneau";
+$stateCap["Indiana"] = "Indianapolis";
+$stateCap["Michigan"] = "Lansing";
+
+$cap = $stateCap["Alaska"];
+
+print &lt;&lt;&lt;HERE
+
+&lt;h2&gt;State Capital&lt;/h2&gt;
+&lt;dl&gt;
+  &lt;dt&gt;Alaska&lt;/dt&gt;
+  &lt;dd&gt;$cap&lt;/dd&gt;
+&lt;/dl&gt;
+HERE;
+
+$worldCap = array(
+  "Albania"=&gt;"Tirana",
+  "Japan"=&gt;"Tokyo",
+  "United States"=&gt;"Washington DC"
+  );
+
+$cap = $worldCap["Japan"];
+
+print &lt;&lt;&lt;HERE
+&lt;h2&gt;World Capital&lt;/h2&gt;
+&lt;dl&gt;
+  &lt;dt&gt;Japan&lt;/dt&gt;
+  &lt;dd&gt;$cap&lt;/dd&gt;
+&lt;/dl&gt;
+
+HERE;
+
+print "&lt;h2&gt;World Capitals&lt;/h2&gt; \n";
+print "&lt;dl&gt; \n";
+
+foreach ($worldCap as $country =&gt; $capital){
+  //print "$country: $capital&lt;br /&gt;\n";
+  print &lt;&lt;&lt;HERE
+  &lt;dt&gt;$country&lt;/dt&gt;
+  &lt;dd&gt;$capital&lt;/dd&gt;
+  
+HERE;
+} // end foreach
+
+print "&lt;/dl&gt; \n";
+?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+

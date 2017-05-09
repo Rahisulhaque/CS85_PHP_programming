@@ -1,0 +1,74 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: Inherit.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>Inherit.php</h1>
+
+  <h2>Source of Inherit.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Glitter Critter&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;?php 
+
+// Incorporating Inheritance
+
+//pull up the Critter class
+include "critter.php";
+
+//create new Glitter Critter based on Critter
+
+class GlitterCritter extends Critter{
+  //add one method
+  function glow(){
+    print "&lt;p&gt;" . $this-&gt;name . " gently shimmers...&lt;/p&gt; \n";
+  } // end glow
+
+  //over-ride the setName method
+  function setName($newName){
+    $this-&gt;name = "Glittery " . $newName;
+  } // end setName
+
+} // end GC class def
+
+//make an instance of the new critter
+$theCritter = new GlitterCritter("Gloria");
+
+//GC has no constructor, so it 'borrows' from its parent
+
+print "&lt;p&gt;Critter name: " . $theCritter-&gt;getName() . "&lt;/p&gt; \n";
+
+//invoke new glow method
+$theCritter-&gt;glow();
+
+
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+
+
+
+
+
+
+
+
+    </pre>
+  </body>
+</html>
+

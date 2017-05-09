@@ -1,0 +1,14 @@
+/* assoc.css */
+h2 {
+  clear: both;
+}
+dt {
+  float: left;
+  width: 5em;
+  font-weight: bold;
+  clear: left;
+}
+
+dd {
+  float: left;
+} 

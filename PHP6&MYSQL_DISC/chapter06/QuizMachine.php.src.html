@@ -1,0 +1,208 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: QuizMachine.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>QuizMachine.php</h1>
+
+  <h2>Source of QuizMachine.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Quiz Builder&lt;/title&gt;
+
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "quiz.css" /&gt;
+      
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Quiz Machine&lt;/h1&gt;
+
+&lt;?php
+
+getFiles();
+showTest();
+showEdit();
+showLog();
+
+function getFiles(){
+  //get list of all files for use in other routines
+
+  global $dirPtr, $theFiles;
+  
+  chdir(".");
+  $dirPtr = openDir(".");
+  $currentFile = readDir($dirPtr);
+  while ($currentFile !== false){
+    $theFiles[] = $currentFile;
+    $currentFile = readDir($dirPtr);
+  } // end while
+  
+} // end getFiles
+
+
+function showTest(){
+  //print a list of tests for user to take
+
+  global $theFiles;
+  
+
+  //select only quiz html files
+  $testFiles = preg_grep("/mas$/", $theFiles);
+
+  //generate the select box first
+  $selQuiz = "    &lt;select name = \"takeFile\"&gt; \n";
+  foreach ($testFiles as $myFile){
+    $fileBase = substr($myFile, 0, strlen($myFile) - 4);
+    $selQuiz .= &lt;&lt;&lt;HERE
+      &lt;option value = "$fileBase"&gt;
+        $fileBase
+      &lt;/option&gt;
+      
+HERE;
+
+  } // end foreach
+  $selQuiz .= "    &lt;/select&gt; \n";
+  
+  print &lt;&lt;&lt;HERE
+&lt;form action = "takeQuiz.php"
+      method = "post"&gt;
+
+  &lt;fieldset&gt;
+    &lt;h3&gt;Take a quiz&lt;/h3&gt;
+    &lt;label&gt;quiz password&lt;/label&gt;
+    &lt;input type = "password"
+           name = "password" /&gt;
+
+    &lt;label&gt;quiz&lt;/label&gt;
+    $selQuiz
+
+    &lt;button type = "submit"&gt;
+      Take quiz
+    &lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+} // end showTest
+
+
+function showEdit(){
+  // let user select a master file to edit
+
+  global $theFiles;
+  //get only quiz master files
+  $testFiles = preg_grep("/mas$/", $theFiles);
+
+  //generate the select box first
+  $selEdit = "    &lt;select name = \"editFile\"&gt; \n";
+  foreach ($testFiles as $myFile){
+    $fileBase = substr($myFile, 0, strlen($myFile) - 4);
+    $selEdit .= &lt;&lt;&lt;HERE
+      &lt;option value = "$fileBase"&gt;
+        $fileBase
+      &lt;/option&gt;
+      
+HERE;
+
+  } // end foreach
+  // add a 'new quiz' option
+  $selEdit .= &lt;&lt;&lt;HERE
+      &lt;option value = "new"&gt;
+        new quiz
+      &lt;/option&gt;
+      
+HERE;
+  
+  $selEdit .= "    &lt;/select&gt; \n";
+  
+
+  //edit a quiz
+  print &lt;&lt;&lt;HERE
+&lt;form action = "editQuiz.php"
+      method = "post"&gt;
+
+  &lt;fieldset&gt;
+    &lt;h3&gt;Edit a quiz&lt;/h3&gt;
+    &lt;label&gt;admin password&lt;/label&gt;
+    &lt;input type = "password"
+           name = "password" 
+           value = "absolute"/&gt;
+
+    &lt;label&gt;quiz&lt;/label&gt;
+    $selEdit
+
+    &lt;button type = "submit"&gt;
+      Edit quiz
+    &lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+
+} // end showEdit
+
+function showLog(){
+
+  //let user choose from a list of log files
+  global $theFiles;
+  $testFiles = preg_grep("/log$/", $theFiles);
+
+  //generate the select box first
+  $selLog = "    &lt;select name = \"logFile\"&gt; \n";
+  foreach ($testFiles as $myFile){
+    $fileBase = substr($myFile, 0, strlen($myFile) - 4);
+    $selLog .= &lt;&lt;&lt;HERE
+      &lt;option value = "$fileBase"&gt;
+        $fileBase
+      &lt;/option&gt;
+      
+HERE;
+
+  } // end foreach
+  $selLog .= "    &lt;/select&gt; \n";
+  
+  //edit a quiz
+  print &lt;&lt;&lt;HERE
+&lt;form action = "showLog.php"
+      method = "post"&gt;
+
+  &lt;fieldset&gt;
+    &lt;h3&gt;View a quiz log&lt;/h3&gt;
+    &lt;label&gt;admin password&lt;/label&gt;
+    &lt;input type = "password"
+           name = "password"
+           value = "absolute" /&gt;
+
+    &lt;label&gt;quiz&lt;/label&gt;
+    $selLog
+
+    &lt;button type = "submit"&gt;
+      View log
+    &lt;/button&gt;
+  &lt;/fieldset&gt;
+&lt;/form&gt;
+
+HERE;
+
+} // end showLog
+
+?&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+
+    </pre>
+  </body>
+</html>
+

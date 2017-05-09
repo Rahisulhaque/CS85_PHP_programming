@@ -1,0 +1,142 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Monty Python</title>
+<style type = "text/css">
+ol ol {
+  border-bottom: 1px solid black;
+}
+
+ol ol li {
+  list-style-type: upperAlpha;
+}
+</style>
+</head>
+<body>
+
+<h1>Monty Python</h1>
+
+<form action = "gradeQuiz.php"
+      method = "post">
+  <fieldset>
+    <label>Name</label>
+    <input type = "text"
+           name = "student" />
+    
+    <ol>
+      <li>
+        What is your name?
+        <ol>
+          <li>
+            <input type = "radio"
+                   name = "quest[1]"
+                   value = "A" />
+              Arthur, King of the Britons
+          </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "B" />
+          Roger the Shrubber
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "C" />
+        Tim the Enchanter
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[1]"
+               value = "D" />
+          Galahad the Pure
+      </li>
+
+    </ol>
+    
+  </li>
+      <li>
+        What is your quest?
+        <ol>
+          <li>
+            <input type = "radio"
+                   name = "quest[2]"
+                   value = "A" />
+              The largest tree in the forest
+          </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[2]"
+               value = "B" />
+          A dead parrot
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[2]"
+               value = "C" />
+        I seek the Holy Grail
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[2]"
+               value = "D" />
+          Castle St. Aaaaargh
+      </li>
+
+    </ol>
+    
+  </li>
+      <li>
+        What is the airspeed velocity of an unladen swallow?
+        <ol>
+          <li>
+            <input type = "radio"
+                   name = "quest[3]"
+                   value = "A" />
+              15 bps
+          </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[3]"
+               value = "B" />
+          8.3 mph
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[3]"
+               value = "C" />
+        12 knots
+      </li>
+
+      <li>
+        <input type = "radio"
+               name = "quest[3]"
+               value = "D" />
+          African or European?
+      </li>
+
+    </ol>
+    
+  </li>
+</ol>
+
+<input type = "hidden"
+       name = "quizName"
+       value = "Monty Python" />
+       
+<input type = "submit"
+       value = "submit quiz" />
+</fieldset>       
+</form>
+</body>
+</html>

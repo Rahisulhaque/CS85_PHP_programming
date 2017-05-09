@@ -1,0 +1,113 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: editQuiz.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>editQuiz.php</h1>
+
+  <h2>Source of editQuiz.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;Quiz Builder&lt;/title&gt;
+
+&lt;link rel = "stylesheet"
+      type = "text/css"
+      href = "quiz.css" /&gt;
+      
+&lt;/head&gt;
+&lt;body&gt;
+&lt;h1&gt;Edit a Quiz&lt;/h1&gt;
+&lt;?php 
+
+//retrieve variables from form
+$password = filter_input(INPUT_POST, "password");
+$editFile = filter_input(INPUT_POST, "editFile");
+
+if ($password != "absolute"){
+  print &lt;&lt;&lt;HERE
+  
+&lt;p class = "error"&gt;
+Incorrect Password.&lt;br /&gt;
+You must have a password in order to edit this quiz.
+&lt;/p&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+HERE;
+} else {
+  //check to see if user has chosen a form to edit
+  if ($editFile == "new"){
+    //if it's a new file, put in some dummy values
+    $quizName = "sample test";
+    $quizEmail = "root@localhost";
+    $quizData = "q:a:b:c:d:correct";
+    $quizPwd = "php";
+  } else {    
+    //open up the file and get the data from it
+    $editFile .= ".mas";
+    $fp = fopen($editFile, "r");
+    $quizName = fgets($fp);
+    $quizEmail = fgets($fp);
+    $quizPwd = fgets($fp);
+    $quizData = "";
+    while (!feof($fp)){
+      $quizData .= fgets($fp);
+    } // end while
+  } // end 'new form' if
+
+  print &lt;&lt;&lt;HERE
+
+  &lt;form action = "writeQuiz.php"
+        method = "post"&gt;
+        
+    &lt;fieldset&gt;
+      &lt;label&gt;Quiz Name&lt;/label&gt;
+      &lt;input type = "text"
+             name = "quizName"
+             value = "$quizName" /&gt;
+             
+      &lt;label&gt;Instructor Email&lt;/label&gt;
+      &lt;input type = "text"
+             name = "quizEmail"
+             value = "$quizEmail" /&gt;
+      
+      &lt;label&gt;Password&lt;/label&gt;
+      &lt;input type = "text"
+             name = "quizPwd"
+             value = "$quizPwd" /&gt;
+             
+      &lt;textarea name = "quizData"
+                rows = "20"
+                cols = "60"&gt;
+$quizData&lt;/textarea&gt;            
+
+      &lt;button type = "submit"&gt;
+        save quiz
+      &lt;/button&gt;
+    &lt;/fieldset&gt;
+  &lt;/form&gt;
+HERE;
+
+} // end if
+
+?&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+
+
+    </pre>
+  </body>
+</html>
+

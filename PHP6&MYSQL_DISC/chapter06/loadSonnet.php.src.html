@@ -1,0 +1,59 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="content-type" content="text/xml; charset=utf-8" />
+    <title>Source code listing: loadSonnet.php</title>
+    <link rel = "stylesheet"
+          type = "text/css"
+          href = "../phpMas.css" />
+  </head>
+  <body>
+    <h1>loadSonnet.php</h1>
+
+  <h2>Source of loadSonnet.php</h2> 
+    <pre>
+&lt;!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"&gt;
+&lt;html lang="EN" dir="ltr" xmlns="http://www.w3.org/1999/xhtml"&gt;
+&lt;head&gt;
+&lt;title&gt;LoadSonnet&lt;/title&gt;
+&lt;style type = "text/css"&gt;
+body{
+  background-color:darkred;
+  color: white;
+  font-family: 'Brush Script MT', script;
+  font-size: 1.5em;
+  text-align: center;
+}
+&lt;/style&gt;
+
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div&gt;
+&lt;?php 
+$fp = fopen("sonnet76.txt", "r");
+
+//first line is title
+$line = fgets($fp);
+print "&lt;h1&gt;$line&lt;/h1&gt;\n";
+
+//print rest of sonnet
+while (!feof($fp)){
+  $line = fgets($fp);
+  print "$line &lt;br /&gt;\n";
+} // end while
+
+fclose($fp);
+
+?&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+
+
+    </pre>
+  </body>
+</html>
+
